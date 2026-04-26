@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JMAffiliate — XRPL Operator</title>
+<meta name="description" content="Co-founder of @XRPCHESS. Tribesman of $UGA. Building & shilling on the XRP Ledger.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0a08;
+    --bg-warm: #1a1410;
+    --bg-cool: #0a0e14;
+    --ink: #f4ede0;
+    --ink-dim: #8a8378;
+    --ink-quiet: #524c44;
+    --gold: #d4a64a;
+    --jungle: #c9a14a;
+    --banana: #e8c547;
+    --marble: #e8e4dc;
+    --rook: #2a2520;
+    --line: rgba(244, 237, 224, 0.08);
+    --line-strong: rgba(244, 237, 224, 0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ambient duality background — warm left, cool right, vignette */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 0% 30%, rgba(212, 166, 74, 0.10) 0%, transparent 50%),
+      radial-gradient(ellipse at 100% 70%, rgba(74, 110, 166, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at center, transparent 0%, var(--bg) 80%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* grain overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    opacity: 0.07;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: overlay;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 2;
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 56px 24px 40px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    margin-bottom: 56px;
+    animation: rise 0.8s ease-out both;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+    padding: 6px 12px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+
+  .badge::before {
+    content: "● ";
+    color: var(--gold);
+  }
+
+  .name {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(44px, 9vw, 60px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .name em {
+    font-style: normal;
+    font-weight: 300;
+    color: var(--ink-dim);
+  }
+
+  .tag {
+    font-size: 14px;
+    color: var(--ink-dim);
+    max-width: 360px;
+    margin: 0 auto;
+    letter-spacing: 0.01em;
+  }
+
+  .tag .sep {
+    color: var(--ink-quiet);
+    margin: 0 8px;
+  }
+
+  /* SECTION LABELS */
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ink-quiet);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 4px 16px;
+  }
+
+  .label::before, .label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* PROJECT CARDS */
+  .projects {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+
+  .card {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 26px 28px;
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+    background: linear-gradient(180deg, rgba(255,255,255,0.015) 0%, transparent 100%);
+    animation: rise 0.8s ease-out both;
+  }
+
+  .card:nth-child(1) { animation-delay: 0.15s; }
+  .card:nth-child(2) { animation-delay: 0.30s; }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+
+  .card.uga::before {
+    background:
+      radial-gradient(circle at 20% 0%, rgba(232, 197, 71, 0.18), transparent 60%),
+      radial-gradient(circle at 100% 100%, rgba(95, 130, 60, 0.12), transparent 50%);
+  }
+
+  .card.chess::before {
+    background:
+      radial-gradient(circle at 80% 0%, rgba(232, 228, 220, 0.10), transparent 60%),
+      radial-gradient(circle at 0% 100%, rgba(74, 110, 166, 0.10), transparent 50%);
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--line-strong);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .glyph {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    font-size: 26px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.02);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card:hover .glyph { transform: rotate(-6deg) scale(1.05); }
+
+  .uga .glyph {
+    background: linear-gradient(135deg, rgba(232, 197, 71, 0.15), rgba(95, 130, 60, 0.10));
+    border-color: rgba(232, 197, 71, 0.25);
+  }
+
+  .chess .glyph {
+    background: linear-gradient(135deg, rgba(232, 228, 220, 0.10), rgba(42, 37, 32, 0.40));
+    border-color: rgba(232, 228, 220, 0.18);
+  }
+
+  .card-meta { flex: 1; min-width: 0; }
+
+  .card-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-quiet);
+    margin-bottom: 4px;
+  }
+
+  .uga .card-kicker { color: var(--banana); opacity: 0.7; }
+  .chess .card-kicker { color: var(--marble); opacity: 0.55; }
+
+  .card-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.4;
+  }
+
+  .arrow {
+    flex-shrink: 0;
+    color: var(--ink-quiet);
+    font-family: 'JetBrains Mono', monospace;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+  }
+
+  .card:hover .arrow {
+    transform: translateX(4px);
+    color: var(--ink);
+  }
+
+  /* SOCIAL ROW */
+  .socials {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 40px;
+    animation: rise 0.8s ease-out 0.45s both;
+  }
+
+  .sbtn {
+    text-decoration: none;
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  .sbtn:hover {
+    color: var(--ink);
+    border-color: var(--line-strong);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .sbtn-handle {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-quiet);
+    margin-top: 2px;
+  }
+
+  /* DISCLOSURE */
+  .disclosure {
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+    margin-top: auto;
+    font-size: 11px;
+    color: var(--ink-quiet);
+    line-height: 1.65;
+    animation: rise 0.8s ease-out 0.6s both;
+  }
+
+  .disclosure strong { color: var(--ink-dim); font-weight: 500; }
+
+  .disclosure-line {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .disclosure-line .dot {
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  footer {
+    margin-top: 24px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-quiet);
+  }
+
+  footer .pulse {
+    color: var(--gold);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* small-screen tweaks */
+  @media (max-width: 420px) {
+    .wrap { padding: 40px 20px 32px; }
+    header { margin-bottom: 44px; }
+    .name { font-size: 44px; }
+    .card { padding: 22px 20px; }
+    .glyph { width: 46px; height: 46px; font-size: 22px; border-radius: 12px; }
+    .card-title { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="badge">XRPL · Operator</div>
+    <h1 class="name">JM<em>Affiliate</em></h1>
+    <p class="tag">
+      Co-founder of XRP Chess
+      <span class="sep">·</span>
+      Tribesman of $UGA
+    </p>
+  </header>
+
+  <div class="label">The Two Worlds</div>
+
+  <section class="projects">
+
+    <a class="card uga" href="https://ugalabz.store/?ref=MADKILLA" target="_blank" rel="noopener">
+      <div class="card-row">
+        <div class="glyph">🦍</div>
+        <div class="card-meta">
+          <div class="card-kicker">Wear the Brethren</div>
+          <div class="card-title">UGA Regalia</div>
+          <div class="card-desc">Primal tees, hoodies & hats from UgaLabz. Tribesman uniform, jungle quality.</div>
+        </div>
+        <div class="arrow">→</div>
+      </div>
+    </a>
+
+    <a class="card chess" href="https://xrpchess.xyz" target="_blank" rel="noopener">
+      <div class="card-row">
+        <div class="glyph">♞</div>
+        <div class="card-meta">
+          <div class="card-kicker">Play the Board</div>
+          <div class="card-title">XRP Chess</div>
+          <div class="card-desc">394 hand-crafted piece skins, AI butler, multiplayer. Open beta on the XRPL.</div>
+        </div>
+        <div class="arrow">→</div>
+      </div>
+    </a>
+
+  </section>
+
+  <div class="label">Find Me</div>
+
+  <nav class="socials">
+    <a class="sbtn" href="https://x.com/JMAffiliate" target="_blank" rel="noopener">
+      Operator
+      <span class="sbtn-handle">@JMAffiliate</span>
+    </a>
+    <a class="sbtn" href="https://x.com/UgAbugaXRP" target="_blank" rel="noopener">
+      Jungle
+      <span class="sbtn-handle">@UgAbugaXRP</span>
+    </a>
+    <a class="sbtn" href="https://x.com/XRPCHESS" target="_blank" rel="noopener">
+      Chess
+      <span class="sbtn-handle">@XRPCHESS</span>
+    </a>
+  </nav>
+
+  <div class="disclosure">
+    <div class="disclosure-line"><span class="dot">◆</span><span><strong>Disclosure:</strong> 51% owner of XRP Chess. When I post about it, I'm posting about my own project.</span></div>
+    <div class="disclosure-line"><span class="dot">◆</span><span>Affiliate partner of UgaLabz. The UGA regalia link earns me a small cut at no cost to you.</span></div>
+    <div class="disclosure-line"><span class="dot">◆</span><span>Both XRPL. Both built with full conviction.</span></div>
+  </div>
+
+  <footer>
+    <span class="pulse">●</span>&nbsp;&nbsp;Live on the Ledger
+  </footer>
+
+</div>
+</body>
+</html>
