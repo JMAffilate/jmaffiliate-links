@@ -506,5 +506,28 @@ if (!gl || reduceMotion) {
   loop();
 }
 </script>
+
+<!-- Vercel Web Analytics + custom card-click tracking -->
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script>
+  // Fire a human-readable event when a project card is clicked
+  document.addEventListener('DOMContentLoaded', function () {
+    var events = {
+      'card chess':       'Clicked XRP Chess',
+      'card uga':         'Clicked UGA Regalia',
+      'card firstledger': 'Clicked First Ledger'
+    };
+    Object.keys(events).forEach(function (cls) {
+      var el = document.querySelector('a[class="' + cls + '"]');
+      if (!el) return;
+      el.addEventListener('click', function () {
+        try { window.va('event', { name: events[cls] }); } catch (e) {}
+      });
+    });
+  });
+</script>
 </body>
 </html>
