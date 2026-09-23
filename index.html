@@ -242,6 +242,8 @@ header { text-align: center; margin-bottom: 58px; animation: rise 0.8s ease-out 
 .socials { display: grid; gap: 9px; animation: rise 0.8s ease-out 0.45s both; }
 .socials-single { grid-template-columns: 1fr; margin-bottom: 26px; }
 .socials-two { grid-template-columns: 1fr 1fr; margin-bottom: 44px; }
+.socials-three { grid-template-columns: 1fr 1fr 1fr; margin-bottom: 44px; }
+@media (max-width: 480px) { .socials-three { grid-template-columns: 1fr; } }
 
 .sbtn {
   text-decoration: none;
@@ -382,7 +384,7 @@ a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
   </nav>
 
   <div class="label">Official Accounts</div>
-  <nav class="socials socials-two">
+  <nav class="socials socials-three">
     <a class="sbtn" href="https://x.com/UgAbugaXRP" target="_blank" rel="noopener">
       UGA Buga
       <span class="sbtn-handle">@UgAbugaXRP</span>
@@ -390,6 +392,10 @@ a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
     <a class="sbtn" href="https://x.com/XRPCHESS" target="_blank" rel="noopener">
       XRP Chess
       <span class="sbtn-handle">@XRPCHESS</span>
+    </a>
+    <a class="sbtn" href="https://x.com/First_Ledger" target="_blank" rel="noopener">
+      First Ledger
+      <span class="sbtn-handle">@First_Ledger</span>
     </a>
   </nav>
 
